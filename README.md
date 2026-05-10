@@ -117,7 +117,26 @@ animate(memory)
 ```
 
 ---
+## GIFs d'exemples
 
+- **Building — Avec Alarme :**  
+    ![Avec Alarme à Incendie](data/building/Avec%20Alarme%20%C3%A0%20Incendie.gif)
+
+- **Building — Sans Alarme :**  
+    ![Sans Alarme à Incendie](data/building/Sans%20Alarme%20%C3%A0%20Incendie.gif)
+
+- **Obstacle — Porte :**  
+    ![Porte](data/obstacle/Porte.gif)
+
+- **Wind — Face à face :**  
+    ![Face à face](data/wind/Face%20à%20face.gif)
+ 
+- **Wind — Goutte :**  
+    ![Goutte](data/wind/Goutte.gif)
+ 
+- **Wind — 4 Vagues :**  
+    ![4 Vagues](data/wind/4%20Vagues.gif)
+ 
 ## États des cellules (valeurs utilisées)
 
 | Valeur | Signification |
