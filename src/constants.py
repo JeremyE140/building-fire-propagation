@@ -1,0 +1,13 @@
+# constants.py
+
+EMPTY = 0
+IGNITION = 0.5
+FIRE = 1
+
+WALL = -1
+STRUCTURE = -0.25
+
+WET = -0.5
+BURNED_WET = -0.75
+
+BURNED = -1.5
