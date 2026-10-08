@@ -16,7 +16,7 @@ def burn(probability):
 
 
 def vertical_propagation(probability):
-    return IGNITION if random.random() < probability else STRUCTURE
+    return IGNITION if random.random() < probability else FLAMMABLE_SURFACE
 
 
 def sprinkler(building, floor, flow):

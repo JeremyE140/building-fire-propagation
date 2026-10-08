@@ -132,7 +132,7 @@ animate(memory)
 | 0      | Zone inflammable |
 | 0.5    | Inflammation |
 | 1      | Feu actif |
-| -0.25  | Structure |
+| -0.25  | Surface inflammable |
 | -0.5   | Zone mouillée |
 | -0.75  | Zone brûlée mouillée |
 | -1     | Mur |

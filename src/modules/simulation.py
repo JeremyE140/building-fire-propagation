@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .constants import EMPTY, FIRE, IGNITION
+from .constants import EMPTY, FIRE, FLAMMABLE_SURFACE, IGNITION
 from .propagation import burn, ignite, sprinkler
 from .utils import get_cell, position
 from .wind import wind_propagation
@@ -59,15 +59,15 @@ class FireSimulation:
             current = previous.copy()
 
             for z in range(previous.shape[0]):
-                for row in range(2, previous.shape[1] - 2):
-                    for col in range(2, previous.shape[2] - 2):
+                for row in range(previous.shape[1]):
+                    for col in range(previous.shape[2]):
                         cell = previous[z, row, col]
                         if cell == FIRE:
                             current[z, row, col] = burn(self.combustion)
                         elif cell == IGNITION:
                             current[z, row, col] = FIRE
-                        elif cell == EMPTY and self._should_ignite(
-                            previous, z, row, col
+                        elif cell in (EMPTY, FLAMMABLE_SURFACE) and self._should_ignite(
+                            previous, z, row, col, cell
                         ):
                             current[z, row, col] = IGNITION
 
@@ -78,7 +78,7 @@ class FireSimulation:
 
         return memory
 
-    def _should_ignite(self, state, z, row, col):
+    def _should_ignite(self, state, z, row, col, cell):
         x = col
         y = state.shape[1] - 1 - row
         wind = (
@@ -94,6 +94,11 @@ class FireSimulation:
             (row - 1, col, 3),
         )
         for neighbor_row, neighbor_col, direction in neighbors:
+            if not (
+                0 <= neighbor_row < state.shape[1]
+                and 0 <= neighbor_col < state.shape[2]
+            ):
+                continue
             if state[z, neighbor_row, neighbor_col] != FIRE:
                 continue
 
@@ -104,12 +109,12 @@ class FireSimulation:
             if ignite(min(probability, 1)) == IGNITION:
                 return True
 
-        for adjacent_floor in (z - 1, z + 1):
-            if (
-                0 <= adjacent_floor < state.shape[0]
-                and state[adjacent_floor, row, col] == FIRE
-                and ignite(self.ph) == IGNITION
-            ):
-                return True
+        if (
+            cell == FLAMMABLE_SURFACE
+            and z > 0
+            and state[z - 1, row, col] == FIRE
+            and ignite(self.ph) == IGNITION
+        ):
+            return True
 
         return False
