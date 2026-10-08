@@ -31,6 +31,18 @@ building-fire-propagation/
    ├─ config.py          # paramètres de la simulation
    ├─ main.py            # point d'entrée (configuration & lancement)
    └─ modules/           # modules de simulation
+      ├─ building/       # génération du bâtiment
+      │  └─ generation.py
+      ├─ environment/    # environnement et vent
+      │  └─ wind.py
+      ├─ fire/           # propagation et simulation du feu
+      │  ├─ propagation.py
+      │  └─ simulation.py
+      ├─ shared/         # constantes et utilitaires communs
+      │  ├─ constants.py
+      │  └─ utils.py
+      └─ visualization/  # animation et affichage
+         └─ rendering.py
 ```
 
 ---
