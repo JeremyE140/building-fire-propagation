@@ -8,6 +8,8 @@ Simulation d’incendie multi-étages avec propagation probabiliste, influence d
 
 Ce dépôt contient un moteur de simulation (automate cellulaire 3D) simulant la propagation d’un incendie dans un bâtiment, avec prise en compte du vent, de la combustion des matériaux et de systèmes d’arrosage (sprinklers).
 
+Voir les GIFs d’exemples dans la section [GIFs d'exemples](#gifs-d-exemples).
+
 Le calcul utilise principalement `NumPy` et la visualisation `Matplotlib`.
 
 ---
@@ -42,26 +44,11 @@ git clone <repository_url>
 cd building-fire-propagation
 ```
 
-2. Créer et activer un environnement virtuel
-
-Linux / macOS :
-
-```bash
-python -m venv venv
-source venv/bin/activate
-```
-
-Windows (PowerShell) :
-
-```powershell
-python -m venv venv
-venv\\Scripts\\Activate.ps1
-```
-
-3. Installer les dépendances
+2. Installer [`uv`](https://docs.astral.sh/uv/getting-started/installation/) si nécessaire,
+puis synchroniser l’environnement du projet :
 
 ```bash
-pip install .
+uv sync
 ```
 
 ---
@@ -86,10 +73,10 @@ Lancer le script principal depuis la racine du projet. Une fenêtre affiche le G
 généré en mémoire ; aucun fichier GIF n’est enregistré :
 
 ```bash
-python src\\main.py
+uv run python src/main.py
 ```
 
-Sur Linux/macOS utilisez `python3 src/main.py` si nécessaire.
+`uv run` utilise l’environnement créé et synchronisé par `uv sync`.
 
 ---
 

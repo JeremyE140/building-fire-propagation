@@ -1,7 +1,10 @@
 from io import BytesIO
+import logging
+import queue
+import threading
 import tkinter as tk
 
-from matplotlib import cm
+from matplotlib import colormaps
 import numpy as np
 from PIL import Image, ImageDraw, ImageTk
 
@@ -20,7 +23,7 @@ def _create_gif(memory):
     height = title_height + margin + rows * (
         floor_height + floor_title_height + margin
     )
-    colormap = cm.get_cmap("jet")
+    colormap = colormaps["jet"]
     colors = (colormap(np.linspace(0, 1, 254))[:, :3] * 255).astype(np.uint8)
     palette = [0, 0, 0, 255, 255, 255] + colors.ravel().tolist()
 
@@ -36,7 +39,7 @@ def _create_gif(memory):
             y = title_height + margin + row * (
                 floor_height + floor_title_height + margin
             )
-            draw.text((x, y), f"Floor {z}", fill="black")
+            draw.text((x, y), f"Floor {z}", fill=0)
 
             values = np.flipud(memory[t, z])
             normalized = np.clip((values + 1.5) / 3, 0, 1)
@@ -68,13 +71,22 @@ def _create_gif(memory):
 
 
 def animate(memory):
-    gif = Image.open(_create_gif(memory))
     window = tk.Tk()
     window.title("Building Fire Propagation")
+    status = tk.Label(window, text="Préparation de l’animation…")
+    status.pack(padx=20, pady=20)
     label = tk.Label(window)
-    label.pack()
 
-    def show_frame(index=0):
+    result = queue.Queue(maxsize=1)
+
+    def prepare_gif():
+        try:
+            result.put(("ready", _create_gif(memory).getvalue()))
+        except Exception as error:
+            logging.exception("Could not generate the simulation GIF")
+            result.put(("error", str(error)))
+
+    def show_frame(gif, index=0):
         gif.seek(index)
         frame = ImageTk.PhotoImage(gif.copy())
         label.configure(image=frame)
@@ -82,8 +94,25 @@ def animate(memory):
         window.after(
             gif.info.get("duration", 100),
             show_frame,
+            gif,
             (index + 1) % gif.n_frames,
         )
 
-    show_frame()
+    def check_ready():
+        try:
+            result_type, content = result.get_nowait()
+        except queue.Empty:
+            window.after(100, check_ready)
+            return
+
+        if result_type == "error":
+            status.configure(text=f"Erreur lors de la préparation du GIF :\n{content}")
+            return
+
+        status.destroy()
+        label.pack()
+        show_frame(Image.open(BytesIO(content)))
+
+    threading.Thread(target=prepare_gif, daemon=True).start()
+    window.after(100, check_ready)
     window.mainloop()
