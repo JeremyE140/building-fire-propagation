@@ -81,8 +81,9 @@ La simulation démarre avec un foyer au centre de l’étage défini par
 `INITIAL_FIRE_FLOOR` dans `src/config.py`. Le feu se propage selon les
 probabilités surfacique et verticale, avec une influence du vent.
 
-Lancer le script principal depuis la racine du projet. Une fenêtre affiche le GIF animé
-généré en mémoire ; aucun fichier GIF n’est enregistré :
+Lancer le script principal depuis la racine du projet. Une fenêtre occupe la majeure
+partie de l’écran et affiche le GIF animé généré en mémoire, ajusté à la zone
+d’affichage même si la fenêtre est redimensionnée ; aucun fichier GIF n’est enregistré :
 
 ```bash
 uv run python src/main.py

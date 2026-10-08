@@ -6,7 +6,7 @@ import tkinter as tk
 
 from matplotlib import colormaps
 import numpy as np
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageDraw, ImageOps, ImageTk
 
 
 def _create_gif(memory):
@@ -70,9 +70,28 @@ def _create_gif(memory):
     return gif
 
 
+def _fit_frame(frame, size):
+    return ImageOps.contain(
+        frame.convert("RGB"),
+        size,
+        method=Image.Resampling.LANCZOS,
+    )
+
+
 def animate(memory):
     window = tk.Tk()
     window.title("Building Fire Propagation")
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    loading_width = 360
+    loading_height = 100
+    window.geometry(
+        f"{loading_width}x{loading_height}+"
+        f"{(screen_width - loading_width) // 2}+"
+        f"{(screen_height - loading_height) // 2}"
+    )
+    window_width = int(window.winfo_screenwidth() * 0.9)
+    window_height = int(window.winfo_screenheight() * 0.85)
     status = tk.Label(window, text="Préparation de l’animation…")
     status.pack(padx=20, pady=20)
     label = tk.Label(window)
@@ -88,7 +107,12 @@ def animate(memory):
 
     def show_frame(gif, index=0):
         gif.seek(index)
-        frame = ImageTk.PhotoImage(gif.copy())
+        frame = ImageTk.PhotoImage(
+            _fit_frame(
+                gif.copy(),
+                (max(1, label.winfo_width()), max(1, label.winfo_height())),
+            )
+        )
         label.configure(image=frame)
         label.image = frame
         window.after(
@@ -110,7 +134,13 @@ def animate(memory):
             return
 
         status.destroy()
-        label.pack()
+        window.geometry(
+            f"{window_width}x{window_height}+"
+            f"{(screen_width - window_width) // 2}+"
+            f"{(screen_height - window_height) // 2}"
+        )
+        label.pack(fill=tk.BOTH, expand=True)
+        window.update_idletasks()
         show_frame(Image.open(BytesIO(content)))
 
     threading.Thread(target=prepare_gif, daemon=True).start()
