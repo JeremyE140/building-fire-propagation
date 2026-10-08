@@ -3,8 +3,8 @@
 import random
 import numpy as np
 
-from constants import *
-from utils import *
+from .constants import *
+from .utils import *
 
 
 def ignite(probability):

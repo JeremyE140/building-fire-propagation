@@ -1,31 +1,31 @@
-# main.py
-
-from building import create_building
-from wind import compute_wind_field
-from simulation import FireSimulation
-from rendering import animate
-
-
-def wind_function(x, y):
-    return (x**2 + y**2) ** 0.5
-
-
-building = create_building(
-    size=(48, 48),
-    floors=5
-)
-
-wind_field = compute_wind_field(
+from config import (
+    BUILDING_SIZE,
+    FLOORS,
+    INITIAL_FIRE_FLOOR,
+    SIMULATION_STEPS,
+    WIND_DOMAIN,
     wind_function,
-    [-1, 1, -1, 1],
-    building
 )
+from modules.building import create_building
+from modules.rendering import animate
+from modules.simulation import FireSimulation
+from modules.wind import compute_wind_field
 
-simulation = FireSimulation(
-    building,
-    wind_field
-)
 
-memory = simulation.run(120)
+def main():
+    building = create_building(size=BUILDING_SIZE, floors=FLOORS)
+    wind_field = compute_wind_field(wind_function, WIND_DOMAIN, building)
 
-animate(memory)
+    initial_fire = (
+        BUILDING_SIZE[0] // 2,
+        BUILDING_SIZE[1] // 2,
+        INITIAL_FIRE_FLOOR,
+    )
+    simulation = FireSimulation(building, wind_field, initial_fire=initial_fire)
+    memory = simulation.run(SIMULATION_STEPS)
+
+    animate(memory)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from constants import WALL, STRUCTURE, EMPTY
-from utils import center
+from .constants import WALL, STRUCTURE, EMPTY
+from .utils import center
 
 
 def create_building(size, floors):

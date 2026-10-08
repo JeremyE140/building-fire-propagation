@@ -22,18 +22,13 @@ Arborescence principale :
 ```text
 building-fire-propagation/
 ├─ README.md
-├─ requirements.txt
+├─ pyproject.toml
 ├─ data/                 # jeux de données, configs exemples
 ├─ docs/                 # documentation projet
 └─ src/
+   ├─ config.py          # paramètres de la simulation
    ├─ main.py            # point d'entrée (configuration & lancement)
-   ├─ simulation.py      # orchestrateur et boucle temporelle
-   ├─ propagation.py     # règles de propagation du feu
-   ├─ building.py        # génération et représentation du bâtiment
-   ├─ wind.py            # génération et normalisation du champ de vent
-   ├─ rendering.py       # animation / visualisation (Matplotlib)
-   ├─ constants.py       # constantes et codage des états des cellules
-   └─ utils.py           # utilitaires réutilisables
+   └─ modules/           # modules de simulation
 ```
 
 ---
@@ -66,23 +61,29 @@ venv\\Scripts\\Activate.ps1
 3. Installer les dépendances
 
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 ---
 
 ## Dépendances
 
-Les dépendances principales sont listées dans `requirements.txt` :
+Les dépendances principales sont définies dans `pyproject.toml` :
 
 - numpy
 - matplotlib
+- pillow
 
 ---
 
 ## Exécuter la simulation
 
-Lancer le script principal depuis la racine du projet :
+La simulation démarre avec un foyer au centre de l’étage défini par
+`INITIAL_FIRE_FLOOR` dans `src/config.py`. Le feu se propage selon les
+probabilités surfacique et verticale, avec une influence du vent.
+
+Lancer le script principal depuis la racine du projet. Une fenêtre affiche le GIF animé
+généré en mémoire ; aucun fichier GIF n’est enregistré :
 
 ```bash
 python src\\main.py
@@ -97,8 +98,8 @@ Sur Linux/macOS utilisez `python3 src/main.py` si nécessaire.
 Extrait d'utilisation : initialisation d’un bâtiment et exécution d’une simulation.
 
 ```python
-from src.simulation import FireSimulation
-from src.building import create_building
+from modules.simulation import FireSimulation
+from modules.building import create_building
 
 building = create_building(size=(48, 48), floors=5)
 
@@ -112,7 +113,7 @@ simulation = FireSimulation(
 )
 
 memory = simulation.run(120)
-from src.rendering import animate
+from modules.rendering import animate
 animate(memory)
 ```
 
@@ -182,6 +183,7 @@ def wind_function(x, y):
 - `combustion` : probabilité de combustion complète
 - `sprinkler_flow` : intensité du système d'arrosage
 - `steps` : nombre d'itérations temporelles
+- `INITIAL_FIRE_FLOOR` : étage de départ du feu (au centre du bâtiment)
 
 ---
 
