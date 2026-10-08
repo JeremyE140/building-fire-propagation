@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from .constants import WALL, FLAMMABLE_SURFACE, EMPTY
-from .utils import center
+from ..shared.constants import WALL, FLAMMABLE_SURFACE, EMPTY
+from ..shared.utils import center
 
 
 def create_building(size, floors):

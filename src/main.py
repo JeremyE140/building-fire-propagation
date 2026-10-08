@@ -6,10 +6,10 @@ from config import (
     WIND_DOMAIN,
     wind_function,
 )
-from modules.building import create_building
-from modules.rendering import animate
-from modules.simulation import FireSimulation
-from modules.wind import compute_wind_field
+from modules.building.generation import create_building
+from modules.environment.wind import compute_wind_field
+from modules.fire.simulation import FireSimulation
+from modules.visualization.rendering import animate
 
 
 def main():

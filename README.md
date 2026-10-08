@@ -85,8 +85,8 @@ uv run python src/main.py
 Extrait d'utilisation : initialisation d’un bâtiment et exécution d’une simulation.
 
 ```python
-from modules.simulation import FireSimulation
-from modules.building import create_building
+from modules.building.generation import create_building
+from modules.fire.simulation import FireSimulation
 
 building = create_building(size=(48, 48), floors=5)
 
@@ -100,7 +100,7 @@ simulation = FireSimulation(
 )
 
 memory = simulation.run(120)
-from modules.rendering import animate
+from modules.visualization.rendering import animate
 animate(memory)
 ```
 
@@ -153,13 +153,13 @@ def wind_function(x, y):
 
 ---
 
-## Architecture (fichiers principaux)
+## Architecture
 
-- `src/building.py` : génération procédurale du bâtiment
-- `src/propagation.py` : règles de propagation du feu
-- `src/wind.py` : génération et normalisation du champ de vent
-- `src/simulation.py` : boucle temporelle principale
-- `src/rendering.py` : fonctions d'animation et d'affichage
+- `src/modules/building/` : génération du bâtiment
+- `src/modules/fire/` : propagation et simulation du feu
+- `src/modules/environment/` : calcul du champ de vent
+- `src/modules/visualization/` : animation et affichage
+- `src/modules/shared/` : constantes et fonctions utilitaires communes
 
 ---
 

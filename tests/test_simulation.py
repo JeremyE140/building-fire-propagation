@@ -1,7 +1,8 @@
 import unittest
 
-from modules.building import create_building
-from modules.constants import (
+from modules.building.generation import create_building
+from modules.fire.simulation import FireSimulation
+from modules.shared.constants import (
     BURNED,
     EMPTY,
     FIRE,
@@ -9,8 +10,7 @@ from modules.constants import (
     IGNITION,
     WALL,
 )
-from modules.simulation import FireSimulation
-from modules.utils import get_cell, position
+from modules.shared.utils import get_cell, position
 
 
 class FireSimulationTests(unittest.TestCase):

@@ -2,10 +2,10 @@
 
 import numpy as np
 
-from .constants import EMPTY, FIRE, FLAMMABLE_SURFACE, IGNITION
+from ..environment.wind import wind_propagation
+from ..shared.constants import EMPTY, FIRE, FLAMMABLE_SURFACE, IGNITION
+from ..shared.utils import get_cell, position
 from .propagation import burn, ignite, sprinkler
-from .utils import get_cell, position
-from .wind import wind_propagation
 
 
 class FireSimulation:

@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .utils import position_2d
+from ..shared.utils import position_2d
 
 
 def partial_derivative(f, i=0, h=1e-5):

@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from PIL import Image
 
-from modules.rendering import _create_gif
+from modules.visualization.rendering import _create_gif
 
 
 class RenderingTests(unittest.TestCase):

@@ -17,4 +17,11 @@ dependencies = [
 [tool.setuptools]
 package-dir = { "" = "src" }
 py-modules = ["config", "main"]
-packages = ["modules"]
+packages = [
+    "modules",
+    "modules.building",
+    "modules.environment",
+    "modules.fire",
+    "modules.shared",
+    "modules.visualization",
+]
