@@ -8,7 +8,7 @@ Simulation d’incendie multi-étages avec propagation probabiliste, influence d
 
 Ce dépôt contient un moteur de simulation (automate cellulaire 3D) simulant la propagation d’un incendie dans un bâtiment, avec prise en compte du vent, de la combustion des matériaux et de systèmes d’arrosage (sprinklers).
 
-Voir les GIFs d’exemples dans la section [GIFs d'exemples](#gifs-d-exemples).
+Voir les GIFs d’exemples dans la section [GIFs d'exemples](#gifs-dexemples).
 
 Le calcul utilise principalement `NumPy` et la visualisation `Matplotlib`.
 
