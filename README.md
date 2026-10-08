@@ -76,6 +76,18 @@ généré en mémoire ; aucun fichier GIF n’est enregistré :
 uv run python src/main.py
 ```
 
+Les paramètres peuvent être ajustés au lancement. Par exemple :
+
+```bash
+uv run python src/main.py --floors 3 --steps 80 --initial-fire-floor 1 --ps 0.6 --ph 0.1 --combustion 0.03 --sprinkler-flow 5
+```
+
+Les valeurs par défaut sont définies dans `src/config.py` pour le nombre d’étages,
+la durée et l’étage initial; les probabilités utilisent les valeurs par défaut de
+`FireSimulation`. Les probabilités doivent être comprises entre `0` et `1`,
+le nombre d’étages et les étapes doivent être positifs ou nuls, et l’étage
+initial doit exister dans le bâtiment.
+
 `uv run` utilise l’environnement créé et synchronisé par `uv sync`.
 
 ---

@@ -3,9 +3,17 @@
 import numpy as np
 
 from ..environment.wind import wind_propagation
-from ..shared.constants import EMPTY, FIRE, FLAMMABLE_SURFACE, IGNITION
+from ..shared.constants import (
+    BURNED,
+    BURNED_WET,
+    EMPTY,
+    FIRE,
+    FLAMMABLE_SURFACE,
+    IGNITION,
+    WET,
+)
 from ..shared.utils import get_cell, position
-from .propagation import burn, ignite, sprinkler
+from .propagation import burn, floor_on_fire, ignite, sprinkler
 
 
 class FireSimulation:
@@ -66,12 +74,16 @@ class FireSimulation:
                             current[z, row, col] = burn(self.combustion)
                         elif cell == IGNITION:
                             current[z, row, col] = FIRE
+                        elif cell == WET:
+                            current[z, row, col] = EMPTY
+                        elif cell == BURNED_WET:
+                            current[z, row, col] = BURNED
                         elif cell in (EMPTY, FLAMMABLE_SURFACE) and self._should_ignite(
                             previous, z, row, col, cell
                         ):
                             current[z, row, col] = IGNITION
 
-                if self.sprinkler_flow > 0:
+                if self.sprinkler_flow > 0 and floor_on_fire(current, z):
                     sprinkler(current, z, self.sprinkler_flow)
 
             memory[t] = current

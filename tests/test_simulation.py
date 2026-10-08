@@ -4,11 +4,13 @@ from modules.building.generation import create_building
 from modules.fire.simulation import FireSimulation
 from modules.shared.constants import (
     BURNED,
+    BURNED_WET,
     EMPTY,
     FIRE,
     FLAMMABLE_SURFACE,
     IGNITION,
     WALL,
+    WET,
 )
 from modules.shared.utils import get_cell, position
 
@@ -137,6 +139,43 @@ class FireSimulationTests(unittest.TestCase):
         memory = simulation.run(1)
 
         self.assertEqual(get_cell(memory[1], (4, 4, 0)), BURNED)
+
+    def test_wet_cells_dry_back_to_their_original_state(self):
+        building = self.make_building(floors=0)
+        building[position(building, (5, 4, 0))] = WET
+        building[position(building, (6, 4, 0))] = BURNED_WET
+        simulation = FireSimulation(
+            building,
+            wind_field=None,
+            ps=0,
+            ph=0,
+            combustion=0,
+            initial_fire=(4, 4, 0),
+        )
+
+        memory = simulation.run(1)
+
+        self.assertEqual(get_cell(memory[1], (5, 4, 0)), EMPTY)
+        self.assertEqual(get_cell(memory[1], (6, 4, 0)), BURNED)
+
+    def test_sprinkler_only_runs_on_floors_with_active_fire(self):
+        from unittest.mock import patch
+
+        building = self.make_building()
+        simulation = FireSimulation(
+            building,
+            wind_field=None,
+            ps=0,
+            ph=0,
+            combustion=0,
+            sprinkler_flow=1,
+            initial_fire=(4, 4, 0),
+        )
+
+        with patch("modules.fire.propagation.random.randint", return_value=3):
+            memory = simulation.run(1)
+
+        self.assertEqual(get_cell(memory[1], (3, 3, 1)), EMPTY)
 
 
 if __name__ == "__main__":
